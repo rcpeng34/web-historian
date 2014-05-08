@@ -1,8 +1,8 @@
 var path = require('path');
-var archive = require('../helpers/archive-helpers.js');
 var httpHelpers = require('./http-helpers.js');
 var fs = require('fs');
 var htmlFetcher = require('../workers/htmlfetcher.js');
+var archive = require('../helpers/archive-helpers.js');
 
 exports.handleRequest = function (req, res) {
   // define behavior on initial page load
@@ -26,7 +26,6 @@ exports.handleRequest = function (req, res) {
       url = url.slice(4);
       // url is now exactly what is in the input form
       // have to use a callback below because it's asynchronous
-      // now the code is ugly
       archive.isUrlInList(url, function(exists) {
         if (exists) {
         // if the url is in sites.txt, it has been archived
@@ -34,11 +33,12 @@ exports.handleRequest = function (req, res) {
           httpHelpers.serveAssets(res, archive.paths.archivedSites + '/' + url, 'text/html', 200);
         } else {
         // since it wasn't in sites.txt, we have to add it
-          // archive.addUrlToList(url);
+          archive.addUrlToList(url);
         // download the url, and serve it once it has been downloaded
-          htmlFetcher.archiveUrl(url, function(response){
-            console.log('right before serving assets');
-            httpHelpers.serveAssets(response, archive.paths.archivedSites + '/' + url, 'text/html', 302);
+          htmlFetcher.archiveUrl(url, function(){
+            // console.log('right before serving assets');
+            console.log('response', res);
+            httpHelpers.serveAssets(res, archive.paths.archivedSites + '/' + url, 'text/html', 302);
           });
         }
       });
