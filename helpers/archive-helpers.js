@@ -25,7 +25,6 @@ exports.readListOfUrls = function(){
 
 // check if a url is in sites.txt
 exports.isUrlInList = function(url, callback){
-
   fs.readFile(module.exports.paths.list, function(err, sites){
     if(err) {
       throw err;
