@@ -24,7 +24,8 @@ exports.readListOfUrls = function(){
 };
 
 // check if a url is in sites.txt
-exports.isUrlInList = function(url){
+exports.isUrlInList = function(url, callback){
+
   fs.readFile(module.exports.paths.list, function(err, sites){
     if(err) {
       throw err;
@@ -32,11 +33,7 @@ exports.isUrlInList = function(url){
     // sites.txt is formatted as an object
     var siteObj = JSON.parse(sites);
     // once parsed, we can just see if the value exists
-    if (siteObj[url]) {
-      return true;
-    } else {
-      return false;
-    }
+    callback(siteObj[url]);
   });
 };
 
@@ -61,7 +58,6 @@ exports.addUrlToList = function(url){
 exports.isURLArchived = function(url){
 };
 // downloads the html from the url and invokes a callback
-// since this is async, the callback is needed to know when it is done
-exports.downloadUrls = function(url, cbFunc){
-  cbFunc();
+// assume it downloads multiple urls or else it is the same as htmlfetcher
+exports.downloadUrls = function(){
 };
