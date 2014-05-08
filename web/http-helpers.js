@@ -10,7 +10,7 @@ exports.headers = headers = {
   'Content-Type': 'text/html'
 };
 
-// As you progress, keep thinking about what helper functions you can put here!
+// builds the response for the server to serve page data to the client
 exports.serveAssets = function (response, location, contentType, status) {
   fs.readFile(location, function(err, data) {
     if(err) {

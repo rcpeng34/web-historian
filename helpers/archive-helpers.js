@@ -3,10 +3,8 @@ var path = require('path');
 var _ = require('underscore');
 
 /*
- * You will need to reuse the same paths many times over in the course of this sprint.
- * Consider using the `paths` object below to store frequently used file paths. This way,
- * if you move any files, you'll only need to change your code in one place! Feel free to
- * customize it in any way you wish.
+ * the same paths will be used many times
+ * all references to directory paths will use the paths defined below
  */
 
 exports.paths = {
@@ -22,20 +20,18 @@ exports.initialize = function(pathsObj){
   });
 };
 
-// The following function names are provided to you to suggest how you might
-// modularize your code. Keep it clean!
-
 exports.readListOfUrls = function(){
 };
 
+// check if a url is in sites.txt
 exports.isUrlInList = function(url){
   fs.readFile(module.exports.paths.list, function(err, sites){
     if(err) {
       throw err;
     }
+    // sites.txt is formatted as an object
     var siteObj = JSON.parse(sites);
-    // if newUrl is in siteObj, get it from ./archives/sites
-    // if it isn't, download and archive
+    // once parsed, we can just see if the value exists
     if (siteObj[url]) {
       return true;
     } else {
@@ -44,13 +40,19 @@ exports.isUrlInList = function(url){
   });
 };
 
+// adds a site to sites.txt
 exports.addUrlToList = function(url){
+  // grab the existing file
   fs.readFile(module.exports.paths.list, function(err, sites){
     if(err) {
       throw err;
     }
+    // create an object from sites.txt
     var siteObj = JSON.parse(sites);
+    // add url by setting the property
     siteObj[url] = true;
+    // stringify the new object and overwrite
+    // this guarantees know site is added twice
     var input = JSON.stringify(siteObj);
     fs.writeFile(module.exports.paths.list, input);
   });
@@ -58,7 +60,8 @@ exports.addUrlToList = function(url){
 
 exports.isURLArchived = function(url){
 };
-
+// downloads the html from the url and invokes a callback
+// since this is async, the callback is needed to know when it is done
 exports.downloadUrls = function(url, cbFunc){
   cbFunc();
 };
