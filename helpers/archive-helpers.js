@@ -28,14 +28,37 @@ exports.initialize = function(pathsObj){
 exports.readListOfUrls = function(){
 };
 
-exports.isUrlInList = function(){
+exports.isUrlInList = function(url){
+  fs.readFile('../archives/sites.txt', function(err, sites){
+    if(err) {
+      throw err;
+    }
+    var siteObj = JSON.parse(sites);
+    // if newUrl is in siteObj, get it from ./archives/sites
+    // if it isn't, download and archive
+    if (siteObj[url]) {
+      return true;
+    } else {
+      return false;
+    }
+  });
 };
 
-exports.addUrlToList = function(){
+exports.addUrlToList = function(url){
+  fs.readFile('../archives/sites.txt', function(err, sites){
+    if(err) {
+      throw err;
+    }
+    var siteObj = JSON.parse(sites);
+    siteObj[url] = true;
+    var input = JSON.stringify(siteObj);
+    fs.writeFile('../archives/sites.txt', input);
+  });
 };
 
-exports.isURLArchived = function(){
+exports.isURLArchived = function(url){
 };
 
-exports.downloadUrls = function(){
+exports.downloadUrls = function(url, cbFunc){
+  cbFunc();
 };
