@@ -29,7 +29,7 @@ exports.readListOfUrls = function(){
 };
 
 exports.isUrlInList = function(url){
-  fs.readFile('../archives/sites.txt', function(err, sites){
+  fs.readFile(module.exports.paths.list, function(err, sites){
     if(err) {
       throw err;
     }
@@ -45,14 +45,14 @@ exports.isUrlInList = function(url){
 };
 
 exports.addUrlToList = function(url){
-  fs.readFile('../archives/sites.txt', function(err, sites){
+  fs.readFile(module.exports.paths.list, function(err, sites){
     if(err) {
       throw err;
     }
     var siteObj = JSON.parse(sites);
     siteObj[url] = true;
     var input = JSON.stringify(siteObj);
-    fs.writeFile('../archives/sites.txt', input);
+    fs.writeFile(module.exports.paths.list, input);
   });
 };
 
