@@ -20,3 +20,32 @@ exports.serveAssets = function (response, location, contentType, status) {
     response.end(data);
   });
 };
+
+exports.redirect = function (response, url) {
+    response.writeHead(302, {'Location': url});
+    response.end();
+};
+
+  // fs.readFile(archive.paths.siteAssets + '/loading.html', 'utf-8', function(err, data) {
+  //   if (err) {
+  //     throw err;
+  //   }
+  //   console.log('starting write head');
+  //   console.log(data);
+  //   // response.statusCode = 302;
+  //   // response.setHeader('Location', '127.0.0.1:8080/' + url);
+  //   response.writeHead(302, {'Location': '127.0.0.1:8080/' + url});
+  //   response.end(data);
+  // });
+
+// exports.redirect = function (response, url) {
+//   fs.readFile(archive.paths.siteAssets + '/loading.html', function(err, data) {
+//     if (err) {
+//       throw err;
+//     }
+//     console.log('starting write head');
+//     var location = '127.0.0.1:8080/' + url;
+//     console.log(location);
+//     response.end();
+//   });
+// };

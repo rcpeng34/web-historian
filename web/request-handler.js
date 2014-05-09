@@ -11,7 +11,7 @@ exports.handleRequest = function (req, res) {
       httpHelpers.serveAssets(res, archive.paths.siteAssets + '/index.html', 'text/html', 200);
     } else if (req.url ==='/styles.css') {
       httpHelpers.serveAssets(res, archive.paths.siteAssets + '/styles.css', 'text/css', 200);
-    } else if (req.url ==='/loading.html') {
+    } else /*(req.url ==='/loading.html')*/ {
       httpHelpers.serveAssets(res, archive.paths.siteAssets + '/loading.html', 'text/html', 200);
     }
   }
@@ -34,14 +34,16 @@ exports.handleRequest = function (req, res) {
         } else {
         // since it wasn't in sites.txt, we have to add it
           archive.addUrlToList(url);
-        // download the url, and serve it once it has been downloaded
-          htmlFetcher.archiveUrl(url, function(){
-            // console.log('right before serving assets');
-            console.log('response', res);
-            httpHelpers.serveAssets(res, archive.paths.archivedSites + '/' + url, 'text/html', 302);
-          });
+          console.log('added to list, calling helpers redirect');
+          httpHelpers.redirect(res, url);
         }
       });
     });
   }
 };
+        // // download the url, and serve it once it has been downloaded
+        //   htmlFetcher.archiveUrl(url, function(){
+        //     // console.log('right before serving assets');
+        //     console.log('response', res);
+        //     httpHelpers.serveAssets(res, archive.paths.archivedSites + '/' + url, 'text/html', 302);
+        //   });
