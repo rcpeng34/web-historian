@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var htmlFetcher = require('../workers/htmlfetcher.js');
 
 /*
  * the same paths will be used many times
@@ -20,8 +21,8 @@ exports.initialize = function(pathsObj){
   });
 };
 
-exports.readListOfUrls = function(){
-};
+// exports.readListOfUrls = function(){
+// };
 
 // check if a url is in sites.txt
 exports.isUrlInList = function(url, callback){
@@ -55,8 +56,30 @@ exports.addUrlToList = function(url){
 };
 
 exports.isURLArchived = function(url){
+  // since exists will be deprecated use open
+  // use 'r' flag, r flag throws exception if file doesn't exist
+  fs.open(module.exports.paths.archivedSites + '/' + url, 'r', function(err, data){
+    if (err) {
+      // err means file does not exist, we have to create and download it
+      htmlFetcher.archiveUrl(url, function(){ console.log('downloaded ' + url);});
+    }
+    // if no error, it's been downloaded, do nothing
+  });
 };
 // downloads the html from the url and invokes a callback
 // assume it downloads multiple urls or else it is the same as htmlfetcher
 exports.downloadUrls = function(){
+  //read out all files
+    fs.readFile(module.exports.paths.list, function(err, sites){
+    if(err) {
+      throw err;
+    }
+    // create an object from sites.txt
+    var siteObj = JSON.parse(sites);
+    // check if each site has been archived
+    for (var key in siteObj) {
+      // assume isURLArchived will handle downloading if necessary
+      module.exports.isURLArchived(key);
+    }
+  });
 };
